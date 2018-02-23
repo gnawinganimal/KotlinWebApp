@@ -1,0 +1,7 @@
+ext.kotlin_version = '1.2.21'
+
+ext.ktor_version = '0.9.1'
+
+ext.kotlinx_html_version = '0.6.8'
+ext.react_version = '16.2.1-pre.4-kotlin-1.2.20'
+ext.react_dom_version = '16.2.1-pre.4-kotlin-1.2.20'

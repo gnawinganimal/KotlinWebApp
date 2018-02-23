@@ -1,0 +1,54 @@
+apply plugin: 'kotlin2js'
+apply plugin: 'org.jetbrains.kotlin.frontend'
+apply plugin: "org.kravemir.gradle.sass"
+
+repositories {
+    jcenter()
+    maven { url 'https://kotlin.bintray.com/kotlin-js-wrappers' }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version"
+    compile "org.jetbrains:kotlin-react:$react_version"
+    compile "org.jetbrains:kotlin-react-dom:$react_dom_version"
+}
+
+compileKotlin2Js {
+    kotlinOptions.metaInfo = true
+    kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
+    kotlinOptions.sourceMap = true
+    kotlinOptions.moduleKind = 'commonjs'
+    kotlinOptions.main = "call"
+}
+
+kotlinFrontend {
+    npm {
+        dependency('react')
+        dependency('react-dom')
+        dependency('react-router-dom')
+
+        devDependency("css-loader")
+        devDependency("style-loader")
+        devDependency("babel-loader")
+        devDependency("babel-core")
+    }
+
+    webpackBundle {
+        bundleName = "main"
+        sourceMapEnabled = true
+        port = 8080
+        proxyUrl = "http://localhost:9090"
+        stats = "errors-only"
+    }
+}
+
+sass {
+    main {
+        srcDir = file("$projectDir.path/src/main/sass")
+        outDir = file("$buildDir.path/js/css")
+        exclude = "utils/*.scss"
+    }
+}
+
+run.dependsOn(mainSass)
